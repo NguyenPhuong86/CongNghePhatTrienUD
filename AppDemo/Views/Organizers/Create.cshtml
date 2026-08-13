@@ -1,0 +1,44 @@
+@model Organizer
+
+@{
+    ViewData["Title"] = "Thêm đơn vị tổ chức";
+}
+
+<section class="page-surface">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">Form</p>
+            <h1>Thêm đơn vị tổ chức</h1>
+            <p class="text-muted mb-0">Dữ liệu được validate trước khi lưu vào SQL Server.</p>
+        </div>
+    </div>
+
+    <form asp-action="Create" method="post" class="demo-form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Tên đơn vị</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Type" class="form-label">Loại đơn vị</label>
+            <input asp-for="Type" class="form-control" />
+            <span asp-validation-for="Type" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Experience" class="form-label">Số năm kinh nghiệm</label>
+            <input asp-for="Experience" class="form-control" />
+            <span asp-validation-for="Experience" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <a class="btn btn-secondary" asp-action="Index">Quay lại</a>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

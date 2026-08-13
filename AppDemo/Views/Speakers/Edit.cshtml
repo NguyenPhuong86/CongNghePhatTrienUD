@@ -1,0 +1,45 @@
+@model Speaker
+
+@{
+    ViewData["Title"] = "Sửa diễn giả";
+}
+
+<section class="page-surface">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">CRUD</p>
+            <h1>Sửa diễn giả</h1>
+            <p class="text-muted mb-0">Dữ liệu từ route và form phải cùng trỏ đến một bản ghi.</p>
+        </div>
+    </div>
+
+    <form asp-action="Edit" asp-route-id="@Model.SpeakerId" method="post" class="demo-form">
+        <input type="hidden" asp-for="SpeakerId" />
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Tên diễn giả</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label">Chức danh</label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Bio" class="form-label">Tiểu sử</label>
+            <textarea asp-for="Bio" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="Bio" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <a class="btn btn-secondary" asp-action="Index">Quay lại</a>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

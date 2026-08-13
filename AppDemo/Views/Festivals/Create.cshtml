@@ -1,0 +1,52 @@
+@model Festival
+
+@{
+    ViewData["Title"] = "Thêm lễ hội";
+}
+
+<section class="page-surface">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">Form có dropdown</p>
+            <h1>Thêm lễ hội</h1>
+            <p class="text-muted mb-0">Dropdown lấy dữ liệu đơn vị tổ chức từ database để tạo quan hệ đúng.</p>
+        </div>
+    </div>
+
+    <form asp-action="Create" method="post" class="demo-form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Tên lễ hội</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Date" class="form-label">Ngày tổ chức</label>
+            <input asp-for="Date" type="date" class="form-control" />
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Location" class="form-label">Địa điểm</label>
+            <input asp-for="Location" class="form-control" />
+            <span asp-validation-for="Location" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="OrganizerId" class="form-label">Đơn vị tổ chức</label>
+            <select asp-for="OrganizerId" asp-items="ViewBag.Organizers" class="form-select">
+                <option value="0">-- Chọn đơn vị --</option>
+            </select>
+            <span asp-validation-for="OrganizerId" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Lưu</button>
+        <a class="btn btn-secondary" asp-action="Index">Quay lại</a>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

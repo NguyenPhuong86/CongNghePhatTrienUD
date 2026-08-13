@@ -1,0 +1,68 @@
+@model PresentationEditViewModel
+
+@{
+    ViewData["Title"] = "Thêm bài trình bày";
+}
+
+<section class="page-surface">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">CRUD có AI hỗ trợ</p>
+            <h1>Thêm bài trình bày</h1>
+            <p class="text-muted mb-0">AI tạo bản nháp; người quản trị kiểm tra và quyết định nội dung được lưu.</p>
+        </div>
+    </div>
+
+    <form asp-action="Create" method="post" class="demo-form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="mb-3">
+            <label asp-for="Topic" class="form-label">Chủ đề</label>
+            <input asp-for="Topic" class="form-control" />
+            <span asp-validation-for="Topic" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Duration" class="form-label">Thời lượng</label>
+            <input asp-for="Duration" class="form-control" />
+            <span asp-validation-for="Duration" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Slides" class="form-label">Slide</label>
+            <input asp-for="Slides" class="form-control" />
+            <span asp-validation-for="Slides" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="SpeakerId" class="form-label">Diễn giả</label>
+            <select asp-for="SpeakerId" asp-items="Model.SpeakerOptions" class="form-select">
+                <option value="0">-- Chọn diễn giả --</option>
+            </select>
+            <span asp-validation-for="SpeakerId" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description" class="form-label">Mô tả</label>
+            <textarea asp-for="Description" class="form-control" rows="6"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+            @if (Model.WasGeneratedByAi)
+            {
+                <div class="form-text">Nội dung trên là bản nháp do AI hỗ trợ. Hãy kiểm tra và chỉnh sửa trước khi lưu.</div>
+            }
+        </div>
+
+        @if (!Model.IsAiConfigured)
+        {
+            <div class="alert alert-info">Dịch vụ AI chưa được cấu hình. Ứng dụng sẽ sử dụng nội dung gợi ý dự phòng.</div>
+        }
+
+        <button type="submit" asp-action="SuggestDescription" class="btn btn-outline-primary">Gợi ý mô tả bằng AI</button>
+        <button type="submit" asp-action="Create" class="btn btn-primary">Lưu bài trình bày</button>
+        <a class="btn btn-secondary" asp-action="Index">Quay lại</a>
+    </form>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

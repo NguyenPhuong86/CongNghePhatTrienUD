@@ -1,0 +1,79 @@
+@model PagedResult<Speaker>
+
+@{
+    ViewData["Title"] = "Diễn giả";
+}
+
+<section class="page-surface">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">CRUD</p>
+            <h1>Danh sách diễn giả</h1>
+            <p class="text-muted mb-0">Quản lý dữ liệu diễn giả với tìm kiếm, sắp xếp, phân trang và thao tác ghi dữ liệu cho tài khoản Admin.</p>
+        </div>
+        @if (User.IsInRole("Admin"))
+        {
+            <a class="btn btn-primary" asp-action="Create">Thêm diễn giả</a>
+        }
+    </div>
+
+    <form asp-action="Index" method="get" class="filter-bar row g-2">
+        <div class="col-md-6">
+            <input name="keyword" value="@Model.Keyword" class="form-control" placeholder="Tìm theo tên diễn giả" />
+        </div>
+        <div class="col-md-3">
+            <select name="sortOrder" class="form-select">
+                <option value="name_asc" selected="@(Model.SortOrder == "name_asc")">Tên tăng dần</option>
+                <option value="name_desc" selected="@(Model.SortOrder == "name_desc")">Tên giảm dần</option>
+                <option value="title_asc" selected="@(Model.SortOrder == "title_asc")">Chức danh tăng dần</option>
+                <option value="title_desc" selected="@(Model.SortOrder == "title_desc")">Chức danh giảm dần</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-outline-primary">Lọc</button>
+            <a class="btn btn-outline-secondary" asp-action="Index">Xóa lọc</a>
+        </div>
+    </form>
+
+    <table class="table data-table align-middle">
+        <thead>
+            <tr>
+                <th>Tên diễn giả</th>
+                <th>Chức danh</th>
+                <th>Tiểu sử</th>
+                @if (User.IsInRole("Admin"))
+                {
+                    <th>Thao tác</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var speaker in Model.Items)
+            {
+                <tr>
+                    <td>@speaker.Name</td>
+                    <td>@speaker.Title</td>
+                    <td>@speaker.Bio</td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td class="table-actions">
+                            <a asp-action="Edit" asp-route-id="@speaker.SpeakerId">Sửa</a>
+                            <a class="text-danger" asp-action="Delete" asp-route-id="@speaker.SpeakerId">Xóa</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav aria-label="Phân trang diễn giả" class="pager">
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <a class="btn @(i == Model.Page ? "btn-primary" : "btn-outline-primary") btn-sm"
+               asp-action="Index"
+               asp-route-keyword="@Model.Keyword"
+               asp-route-sortOrder="@Model.SortOrder"
+               asp-route-page="@i">@i</a>
+        }
+    </nav>
+</section>

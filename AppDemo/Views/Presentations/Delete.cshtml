@@ -1,0 +1,30 @@
+@model Presentation
+
+@{
+    ViewData["Title"] = "Xóa bài trình bày";
+}
+
+<section class="page-surface">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">CRUD có quan hệ</p>
+            <h1>Xóa bài trình bày</h1>
+            <p class="text-muted mb-0">Màn hình xác nhận giữ lại thông tin diễn giả để tránh xóa nhầm.</p>
+        </div>
+    </div>
+
+    <p>Bạn có chắc muốn xóa bài trình bày này?</p>
+    <dl class="row">
+        <dt class="col-sm-3">Chủ đề</dt>
+        <dd class="col-sm-9">@Model.Topic</dd>
+        <dt class="col-sm-3">Thời lượng</dt>
+        <dd class="col-sm-9">@Model.Duration phút</dd>
+        <dt class="col-sm-3">Diễn giả</dt>
+        <dd class="col-sm-9">@Model.Speaker?.Name</dd>
+    </dl>
+
+    <form asp-action="Delete" asp-route-id="@Model.PresentationId" method="post">
+        <button type="submit" class="btn btn-danger">Xóa</button>
+        <a class="btn btn-secondary" asp-action="Index">Quay lại</a>
+    </form>
+</section>

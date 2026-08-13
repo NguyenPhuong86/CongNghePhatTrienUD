@@ -1,0 +1,83 @@
+@model PagedResult<PresentationListViewModel>
+
+@{
+    ViewData["Title"] = "Bài trình bày";
+}
+
+<section class="page-surface">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">CRUD có quan hệ</p>
+            <h1>Danh sách bài trình bày</h1>
+            <p class="text-muted mb-0">Bảng dùng projection để hiển thị chủ đề, thời lượng và thông tin diễn giả liên quan.</p>
+        </div>
+        @if (User.IsInRole("Admin"))
+        {
+            <a class="btn btn-primary" asp-action="Create">Thêm bài trình bày</a>
+        }
+    </div>
+
+    <form asp-action="Index" method="get" class="filter-bar row g-2">
+        <div class="col-md-6">
+            <input name="keyword" value="@Model.Keyword" class="form-control" placeholder="Tìm theo chủ đề hoặc diễn giả" />
+        </div>
+        <div class="col-md-3">
+            <select name="sortOrder" class="form-select">
+                <option value="topic_asc" selected="@(Model.SortOrder == "topic_asc")">Chủ đề tăng dần</option>
+                <option value="topic_desc" selected="@(Model.SortOrder == "topic_desc")">Chủ đề giảm dần</option>
+                <option value="duration_asc" selected="@(Model.SortOrder == "duration_asc")">Thời lượng tăng dần</option>
+                <option value="duration_desc" selected="@(Model.SortOrder == "duration_desc")">Thời lượng giảm dần</option>
+            </select>
+        </div>
+        <div class="col-md-3">
+            <button type="submit" class="btn btn-outline-primary">Lọc</button>
+            <a class="btn btn-outline-secondary" asp-action="Index">Xóa lọc</a>
+        </div>
+    </form>
+
+    <table class="table data-table align-middle">
+        <thead>
+            <tr>
+                <th>Chủ đề</th>
+                <th>Thời lượng</th>
+                <th>Slide</th>
+                <th>Diễn giả</th>
+                <th>Chức danh</th>
+                @if (User.IsInRole("Admin"))
+                {
+                    <th>Thao tác</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var presentation in Model.Items)
+            {
+                <tr>
+                    <td>@presentation.Topic</td>
+                    <td>@presentation.Duration phút</td>
+                    <td>@presentation.Slides</td>
+                    <td>@presentation.SpeakerName</td>
+                    <td>@presentation.SpeakerTitle</td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <td class="table-actions">
+                            <a asp-action="Edit" asp-route-id="@presentation.PresentationId">Sửa</a>
+                            <a class="text-danger" asp-action="Delete" asp-route-id="@presentation.PresentationId">Xóa</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <nav aria-label="Phân trang bài trình bày" class="pager">
+        @for (var i = 1; i <= Model.TotalPages; i++)
+        {
+            <a class="btn @(i == Model.Page ? "btn-primary" : "btn-outline-primary") btn-sm"
+               asp-action="Index"
+               asp-route-keyword="@Model.Keyword"
+               asp-route-sortOrder="@Model.SortOrder"
+               asp-route-page="@i">@i</a>
+        }
+    </nav>
+</section>

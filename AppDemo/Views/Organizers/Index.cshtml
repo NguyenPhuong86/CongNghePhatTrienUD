@@ -1,0 +1,39 @@
+@model List<Organizer>
+
+@{
+    ViewData["Title"] = "Đơn vị tổ chức";
+}
+
+<section class="page-surface">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">Entity Framework Core</p>
+            <h1>Đơn vị tổ chức</h1>
+            <p class="text-muted mb-0">Dữ liệu đơn vị được lưu trong SQL Server và được dùng làm nguồn cho dropdown lễ hội.</p>
+        </div>
+        @if (User.IsInRole("Admin"))
+        {
+            <a class="btn btn-primary" asp-action="Create">Thêm đơn vị</a>
+        }
+    </div>
+
+    <table class="table data-table align-middle">
+        <thead>
+            <tr>
+                <th>Tên đơn vị</th>
+                <th>Loại</th>
+                <th>Số năm kinh nghiệm</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var organizer in Model)
+            {
+                <tr>
+                    <td>@organizer.Name</td>
+                    <td>@organizer.Type</td>
+                    <td>@organizer.Experience</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>

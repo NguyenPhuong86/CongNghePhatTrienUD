@@ -1,0 +1,54 @@
+@model List<FestivalDetailViewModel>
+
+@{
+    ViewData["Title"] = "Lễ hội";
+    var keyword = ViewBag.Keyword as string;
+}
+
+<section class="page-surface">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">Dữ liệu quan hệ</p>
+            <h1>Lễ hội</h1>
+            <p class="text-muted mb-0">Danh sách dùng Include và ViewModel để hiển thị lễ hội cùng đơn vị tổ chức.</p>
+        </div>
+        @if (User.IsInRole("Admin"))
+        {
+            <a class="btn btn-primary" asp-action="Create">Thêm lễ hội</a>
+        }
+    </div>
+
+    <form asp-action="Index" method="get" class="filter-bar row g-2">
+        <div class="col-md-8">
+            <input name="keyword" value="@keyword" class="form-control" placeholder="Tìm theo tên lễ hội" />
+        </div>
+        <div class="col-md-4">
+            <button type="submit" class="btn btn-outline-primary">Tìm kiếm</button>
+            <a class="btn btn-outline-secondary" asp-action="Index">Xóa lọc</a>
+        </div>
+    </form>
+
+    <table class="table data-table align-middle">
+        <thead>
+            <tr>
+                <th>Tên lễ hội</th>
+                <th>Ngày tổ chức</th>
+                <th>Địa điểm</th>
+                <th>Đơn vị tổ chức</th>
+                <th>Loại đơn vị</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var festival in Model)
+            {
+                <tr>
+                    <td>@festival.FestivalName</td>
+                    <td>@festival.Date.ToString("dd/MM/yyyy")</td>
+                    <td>@festival.Location</td>
+                    <td>@festival.OrganizerName</td>
+                    <td>@festival.OrganizerType</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</section>

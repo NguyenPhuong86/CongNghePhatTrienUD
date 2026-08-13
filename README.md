@@ -2,6 +2,24 @@
 
 Repository chứa project thực hành xuyên suốt 9 chương của giáo trình *Công nghệ phát triển ứng dụng*. Mã nguồn được phát triển liên tục trong một solution; tài liệu từng chương mô tả điểm bắt đầu, kết quả cần đạt và cách kiểm chứng.
 
+## Cấu trúc repository
+
+```text
+CongNghePhatTrienUD/
+├── AppDemo.slnx
+├── AppDemo/              # Một codebase được mở rộng liên tục qua các chương
+├── AppDemo.Tests/        # Test tích lũy, không xóa test của chương trước
+├── docs/
+│   ├── chapter-01/       # Chỉ chứa tài liệu Chương 1
+│   ├── chapter-02/       # Chỉ chứa tài liệu Chương 2
+│   └── ...
+├── README.md
+├── .gitignore
+└── LICENSE
+```
+
+Repository không lưu các bản sao code trong thư mục `Chuong_1`, `Chuong_2`, … Mỗi chương kế thừa code của chương trước trên cùng `AppDemo`; Git tag lưu lại ảnh chụp hoàn chỉnh của từng giai đoạn.
+
 ## Yêu cầu môi trường
 
 - .NET 10 SDK
@@ -35,8 +53,8 @@ dotnet run --project AppDemo/AppDemo.csproj
 Không thực hành trực tiếp trên `main`, vì `main` luôn chứa phiên bản mới nhất và có thể đã bao gồm lời giải của các chương sau. Hãy tạo branch cá nhân từ tag đầu vào của chương:
 
 ```bash
-git clone <URL_REPOSITORY>
-cd AppDemo
+git clone https://github.com/NguyenPhuong86/CongNghePhatTrienUD.git
+cd CongNghePhatTrienUD
 git switch -c practice-chapter-02 chapter-01-completed
 ```
 

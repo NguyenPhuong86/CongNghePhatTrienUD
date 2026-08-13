@@ -1,6 +1,7 @@
 using AppDemo.Data;
 using AppDemo.Models;
 using AppDemo.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -44,12 +45,14 @@ public class FestivalsController : Controller
         return View(data);
     }
 
+    [Authorize(Roles = "Admin")]
     public IActionResult Create()
     {
         LoadOrganizers();
         return View(new Festival());
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Create(Festival festival)
@@ -66,6 +69,7 @@ public class FestivalsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     public IActionResult CreateFromJson([FromBody] Festival festival)
     {

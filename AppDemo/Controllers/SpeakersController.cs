@@ -1,6 +1,7 @@
 using AppDemo.Data;
 using AppDemo.Models;
 using AppDemo.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -50,11 +51,13 @@ public class SpeakersController : Controller
         return View(model);
     }
 
+    [Authorize(Roles = "Admin")]
     public IActionResult Create()
     {
         return View(new Speaker());
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Create(Speaker speaker)
@@ -70,6 +73,7 @@ public class SpeakersController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [Authorize(Roles = "Admin")]
     public IActionResult Edit(int id)
     {
         var speaker = _context.Speakers.Find(id);
@@ -81,6 +85,7 @@ public class SpeakersController : Controller
         return View(speaker);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Edit(int id, Speaker speaker)
@@ -101,6 +106,7 @@ public class SpeakersController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [Authorize(Roles = "Admin")]
     public IActionResult Delete(int id)
     {
         var speaker = _context.Speakers
@@ -115,6 +121,7 @@ public class SpeakersController : Controller
         return View(speaker);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public IActionResult DeleteConfirmed(int id)

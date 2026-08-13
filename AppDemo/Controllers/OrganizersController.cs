@@ -1,5 +1,6 @@
 using AppDemo.Data;
 using AppDemo.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AppDemo.Controllers;
@@ -27,11 +28,13 @@ public class OrganizersController : Controller
         return View(query.OrderBy(o => o.Name).ToList());
     }
 
+    [Authorize(Roles = "Admin")]
     public IActionResult Create()
     {
         return View(new Organizer());
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public IActionResult Create(Organizer organizer)

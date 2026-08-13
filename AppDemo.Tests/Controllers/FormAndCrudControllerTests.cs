@@ -1,5 +1,6 @@
 using AppDemo.Controllers;
 using AppDemo.Models;
+using AppDemo.Services;
 using AppDemo.Tests.TestHelpers;
 using AppDemo.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -46,7 +47,7 @@ public class FormAndCrudControllerTests
             new Presentation { Topic = "Cơ sở dữ liệu", Duration = 30, Speaker = speaker });
         scope.Context.SaveChanges();
 
-        var controller = new PresentationsController(scope.Context);
+        var controller = new PresentationsController(scope.Context, Mock.Of<IAiTextService>());
         var result = Assert.IsType<ViewResult>(controller.Index("ASP", "duration_desc", 1));
         var model = Assert.IsType<PagedResult<PresentationListViewModel>>(result.Model);
         Assert.Single(model.Items);
@@ -67,7 +68,7 @@ public class FormAndCrudControllerTests
     public async Task Edit_WhenRouteIdDiffers_ReturnsBadRequest()
     {
         using var scope = new SqliteContextScope();
-        var controller = new PresentationsController(scope.Context);
+        var controller = new PresentationsController(scope.Context, Mock.Of<IAiTextService>());
         var model = new PresentationEditViewModel { PresentationId = 2 };
         Assert.IsType<BadRequestResult>(await controller.Edit(1, model, CancellationToken.None));
     }

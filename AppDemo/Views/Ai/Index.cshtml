@@ -1,0 +1,96 @@
+@model AiAssistantViewModel
+
+@{
+    ViewData["Title"] = "Trợ lý AI";
+}
+
+<section class="page-surface">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">Agentic AI</p>
+            <h1>Trợ lý AI</h1>
+            <p class="text-muted mb-0">Màn hình minh họa cách gọi service AI, nhận fallback và dùng dữ liệu bài trình bày làm ngữ cảnh.</p>
+        </div>
+        <span class="badge @(Model.IsAiConfigured ? "bg-success" : "bg-secondary")">
+            @(Model.IsAiConfigured ? "Đã cấu hình API key" : "Đang dùng chế độ demo")
+        </span>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <form asp-action="SuggestDescription" method="post" class="demo-form">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="mb-3">
+                    <label asp-for="Topic" class="form-label">Chủ đề bài trình bày</label>
+                    <input asp-for="Topic" class="form-control" />
+                    <span asp-validation-for="Topic" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SpeakerName" class="form-label">Diễn giả</label>
+                    <input asp-for="SpeakerName" class="form-control" />
+                    <span asp-validation-for="SpeakerName" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Gợi ý mô tả</button>
+            </form>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Result))
+            {
+                <div class="alert alert-info mt-3">
+                    @Model.Result
+                    @if (Model.ResultSource == AiTextSource.Fallback)
+                    {
+                        <hr />
+                        <small>Nội dung mẫu do hệ thống tạo vì dịch vụ AI tạm thời không khả dụng.</small>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="col-lg-6">
+            <form asp-action="Summarize" method="post">
+                <button type="submit" class="btn btn-outline-primary mb-3">
+                    Tóm tắt danh sách bài trình bày
+                </button>
+            </form>
+
+            @if (!string.IsNullOrWhiteSpace(Model.Summary))
+            {
+                <div class="alert alert-success">
+                    @Model.Summary
+                    @if (Model.SummarySource == AiTextSource.Fallback)
+                    {
+                        <hr />
+                        <small>Nội dung mẫu do hệ thống tạo vì dịch vụ AI tạm thời không khả dụng.</small>
+                    }
+                </div>
+            }
+
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Chủ đề</th>
+                        <th>Thời lượng</th>
+                        <th>Diễn giả</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var presentation in Model.Presentations)
+                    {
+                        <tr>
+                            <td>@presentation.Topic</td>
+                            <td>@presentation.Duration phút</td>
+                            <td>@presentation.Speaker?.Name</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

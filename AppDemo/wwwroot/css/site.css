@@ -19,6 +19,56 @@ html {
 
 body {
   margin-bottom: 60px;
+  background: #f6f7fb;
+  color: #172033;
+}
+
+.app-navbar {
+  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.06);
+}
+
+.app-navbar .nav-link {
+  color: #334155;
+  font-weight: 500;
+}
+
+.app-navbar .nav-link:hover {
+  color: #0f766e;
+}
+
+.app-main {
+  padding-top: 24px;
+}
+
+.page-surface {
+  padding: 24px;
+  margin-bottom: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
+}
+
+.page-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 22px;
+}
+
+.page-heading h1 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.2;
+}
+
+.eyebrow {
+  margin: 0 0 6px 0;
+  color: #0f766e;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .company-header {
@@ -30,7 +80,7 @@ body {
 }
 
 .company-header h1 {
-  margin: 0 0 8px;
+  margin: 0 0 8px 0;
   font-size: 30px;
 }
 
@@ -62,6 +112,104 @@ body {
 .service-item h3 {
   margin-top: 0;
   font-size: 20px;
+}
+
+.demo-form {
+  max-width: 680px;
+}
+
+.filter-bar {
+  padding: 14px;
+  margin-bottom: 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+}
+
+.data-table {
+  overflow: hidden;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+}
+
+.data-table thead th {
+  color: #0f172a;
+  background: #eef2f7;
+  border-bottom: 1px solid #d9e2ec;
+}
+
+.data-table tbody tr:hover {
+  background: #f8fafc;
+}
+
+.table-actions {
+  white-space: nowrap;
+}
+
+.table-actions a {
+  display: inline-block;
+  margin-right: 10px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.pager {
+  display: flex;
+  gap: 6px;
+}
+
+.quick-links {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.quick-link {
+  display: block;
+  min-height: 112px;
+  padding: 18px;
+  border: 1px solid #d9e2ec;
+  border-radius: 8px;
+  color: #172033;
+  background: #ffffff;
+  text-decoration: none;
+}
+
+.quick-link:hover {
+  border-color: #0f766e;
+  color: #0f766e;
+}
+
+.quick-link span {
+  display: block;
+  margin-bottom: 8px;
+  color: #64748b;
+  font-size: 14px;
+}
+
+.quick-link strong {
+  display: block;
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.auth-panel {
+  max-width: 760px;
+}
+
+@media (max-width: 767px) {
+  .page-surface {
+    padding: 18px;
+  }
+
+  .page-heading {
+    display: block;
+  }
+
+  .page-heading .btn,
+  .page-heading .badge {
+    margin-top: 14px;
+  }
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {

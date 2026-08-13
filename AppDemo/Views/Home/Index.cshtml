@@ -1,8 +1,34 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Trang chủ";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="page-surface">
+    <div class="page-heading">
+        <div>
+            <p class="eyebrow">ASP.NET Core MVC</p>
+            <h1>Ứng dụng demo cho giáo trình</h1>
+            <p class="text-muted mb-0">
+                AppDemo minh họa cấu trúc MVC, form, validation, Entity Framework Core, CRUD, phân quyền và tích hợp AI trong cùng một ứng dụng.
+            </p>
+        </div>
+    </div>
+
+    <div class="quick-links">
+        <a class="quick-link" asp-controller="Speakers" asp-action="Index">
+            <span>CRUD diễn giả</span>
+            <strong>Danh sách, tìm kiếm, sửa và xóa</strong>
+        </a>
+        <a class="quick-link" asp-controller="Presentations" asp-action="Index">
+            <span>Bài trình bày</span>
+            <strong>Phân trang, sắp xếp và projection</strong>
+        </a>
+        <a class="quick-link" asp-controller="Festivals" asp-action="Index">
+            <span>Lễ hội</span>
+            <strong>Dữ liệu quan hệ với đơn vị tổ chức</strong>
+        </a>
+        <a class="quick-link" asp-controller="Ai" asp-action="Index">
+            <span>Trợ lý AI</span>
+            <strong>Gợi ý mô tả và tóm tắt nội dung</strong>
+        </a>
+    </div>
+</section>

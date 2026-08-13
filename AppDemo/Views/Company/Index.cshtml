@@ -4,11 +4,13 @@
     ViewData["Title"] = "Thông tin công ty";
 }
 
-<partial name="_CompanyHeader" />
+@await Html.PartialAsync("_Header")
 
 <section class="company-section">
     <h2>@Model.Company.Name</h2>
-    <p>@Model.Company.Summary</p>
+    <p>
+        @Model.Company.Summary
+    </p>
     <p>Thành lập năm: @Model.Company.FoundedYear</p>
     <p>Địa chỉ: @Model.Company.Address</p>
 </section>

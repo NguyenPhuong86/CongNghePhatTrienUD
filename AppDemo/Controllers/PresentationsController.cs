@@ -1,6 +1,8 @@
 using AppDemo.Data;
 using AppDemo.Models;
+using AppDemo.Services;
 using AppDemo.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,9 +13,14 @@ public class PresentationsController : Controller
 {
     private const int PageSize = 5;
     private readonly ApplicationDbContext _context;
-    public PresentationsController(ApplicationDbContext context)
+    private readonly IAiTextService _aiTextService;
+
+    public PresentationsController(
+        ApplicationDbContext context,
+        IAiTextService aiTextService)
     {
         _context = context;
+        _aiTextService = aiTextService;
     }
 
     public IActionResult Index(string? keyword, string sortOrder = "topic_asc", int page = 1)
@@ -67,6 +74,7 @@ public class PresentationsController : Controller
         return View(model);
     }
 
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create()
     {
         var model = new PresentationEditViewModel();
@@ -74,6 +82,7 @@ public class PresentationsController : Controller
         return View(model);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
@@ -100,6 +109,41 @@ public class PresentationsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [Authorize(Roles = "Admin")]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SuggestDescription(
+        PresentationEditViewModel model,
+        CancellationToken cancellationToken)
+    {
+        ModelState.Remove(nameof(model.Description));
+        await PrepareModelAsync(model, cancellationToken);
+
+        if (string.IsNullOrWhiteSpace(model.Topic))
+        {
+            ModelState.AddModelError(nameof(model.Topic), "Cần nhập chủ đề trước khi yêu cầu gợi ý.");
+            return View(model.PresentationId == 0 ? "Create" : "Edit", model);
+        }
+
+        var speaker = await _context.Speakers
+            .AsNoTracking()
+            .FirstOrDefaultAsync(s => s.SpeakerId == model.SpeakerId, cancellationToken);
+
+        if (speaker is null)
+        {
+            ModelState.AddModelError(nameof(model.SpeakerId), "Không tìm thấy diễn giả đã chọn.");
+            return View(model.PresentationId == 0 ? "Create" : "Edit", model);
+        }
+
+        var suggestion = await _aiTextService
+            .SuggestPresentationDescriptionAsync(model.Topic, speaker.Name, cancellationToken);
+        model.Description = suggestion.Text;
+        model.WasGeneratedByAi = true;
+
+        return View(model.PresentationId == 0 ? "Create" : "Edit", model);
+    }
+
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(int id, CancellationToken cancellationToken)
     {
         var presentation = await _context.Presentations.FindAsync([id], cancellationToken);
@@ -121,6 +165,7 @@ public class PresentationsController : Controller
         return View(model);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(
@@ -162,6 +207,7 @@ public class PresentationsController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [Authorize(Roles = "Admin")]
     public IActionResult Delete(int id)
     {
         var presentation = _context.Presentations
@@ -176,6 +222,7 @@ public class PresentationsController : Controller
         return View(presentation);
     }
 
+    [Authorize(Roles = "Admin")]
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public IActionResult DeleteConfirmed(int id)
@@ -196,6 +243,7 @@ public class PresentationsController : Controller
         PresentationEditViewModel model,
         CancellationToken cancellationToken = default)
     {
+        model.IsAiConfigured = _aiTextService.IsConfigured;
         model.SpeakerOptions = await _context.Speakers
             .AsNoTracking()
             .OrderBy(s => s.Name)

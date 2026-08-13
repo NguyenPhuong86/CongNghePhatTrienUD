@@ -1,4 +1,6 @@
 using AppDemo.Data;
+using AppDemo.Services;
+using AppDemo.Options;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,6 +28,18 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = "/Account/Login";
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
+builder.Services.Configure<OpenAiOptions>(
+    builder.Configuration.GetSection(OpenAiOptions.SectionName));
+builder.Services
+    .AddHttpClient<IAiTextService, OpenAiTextService>((services, client) =>
+    {
+        var options = services
+            .GetRequiredService<Microsoft.Extensions.Options.IOptions<OpenAiOptions>>()
+            .Value;
+        client.BaseAddress = new Uri(options.BaseUrl);
+        client.Timeout = TimeSpan.FromSeconds(options.TimeoutSeconds);
+    });
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())

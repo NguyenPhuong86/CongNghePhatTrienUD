@@ -1,0 +1,14 @@
+@model CompanyContact
+
+@{
+    ViewData["Title"] = "Liên hệ";
+}
+
+<partial name="_CompanyHeader" />
+
+<section class="company-section">
+    <h2>Liên hệ</h2>
+    <p>Email: @Model.Email</p>
+    <p>Điện thoại: @Model.Phone</p>
+    <p>Thời gian làm việc: @Model.WorkingTime</p>
+</section>

@@ -1,0 +1,27 @@
+@model CompanyIndexViewModel
+
+@{
+    ViewData["Title"] = "Thông tin công ty";
+}
+
+<partial name="_CompanyHeader" />
+
+<section class="company-section">
+    <h2>@Model.Company.Name</h2>
+    <p>@Model.Company.Summary</p>
+    <p>Thành lập năm: @Model.Company.FoundedYear</p>
+    <p>Địa chỉ: @Model.Company.Address</p>
+</section>
+
+<section class="company-section">
+    <h2>Dịch vụ nổi bật</h2>
+    <div class="service-list">
+        @foreach (var service in Model.FeaturedServices)
+        {
+            <article class="service-item">
+                <h3>@service.Name</h3>
+                <p>@service.Description</p>
+            </article>
+        }
+    </div>
+</section>

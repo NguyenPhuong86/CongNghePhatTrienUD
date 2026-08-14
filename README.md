@@ -25,7 +25,7 @@ Repository không lưu các bản sao code trong thư mục `Chuong_1`, `Chuong_
 - .NET 10 SDK
 - Visual Studio Code
 - C# Dev Kit
-- SQL Server từ Chương 6
+- SQL Server LocalDB cho Môi trường thực hành trên Windows, hoặc SQL Server Docker trên macOS/Linux
 
 ## Bắt đầu nhanh
 
@@ -35,6 +35,36 @@ dotnet build AppDemo.slnx --no-restore
 dotnet test AppDemo.slnx --no-build
 dotnet run --project AppDemo/AppDemo.csproj
 ```
+
+## Cơ sở dữ liệu từ Chương 6
+
+Trong **Môi trường thực hành trên Windows**, cấu hình mặc định dùng SQL Server LocalDB
+với Windows Authentication:
+
+```text
+Server: (localdb)\MSSQLLocalDB
+Authentication: Windows Authentication
+Database: AppDemoDb
+```
+
+```powershell
+sqllocaldb info MSSQLLocalDB
+sqllocaldb start MSSQLLocalDB
+dotnet ef database update --project .\AppDemo --startup-project .\AppDemo
+```
+
+LocalDB chỉ hỗ trợ Windows. Trên macOS/Linux, hoặc Windows không có LocalDB, chạy SQL
+Server bằng Docker và lưu connection string chứa mật khẩu bằng User Secrets hoặc biến
+môi trường. Không commit mật khẩu, file `.env` hoặc cấu hình riêng của máy cá nhân.
+
+```powershell
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" `
+  "Server=localhost,1433;Database=AppDemoDb;User Id=sa;Password=<MAT_KHAU_DU_MANH>;TrustServerCertificate=True" `
+  --project .\AppDemo
+```
+
+Các bài kiểm thử dùng SQLite in-memory để chạy cô lập. Kết quả SQLite không thay thế
+việc kiểm tra migration và hành vi đặc thù trên SQL Server.
 
 ## Hướng dẫn thực hành
 

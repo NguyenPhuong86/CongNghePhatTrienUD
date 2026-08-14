@@ -36,6 +36,31 @@ public sealed class OpenAiTextServiceTests
     }
 
     [Fact]
+    public async Task Suggest_ReturnsProviderResult_ForNestedOutputFixture()
+    {
+        const string json = """
+            {"output":[{"content":[{"type":"output_text","text":"Nội dung lồng nhau."}]}]}
+            """;
+        var service = CreateService(HttpStatusCode.OK, json);
+
+        var result = await service.SuggestPresentationDescriptionAsync("EF Core", "Lan");
+
+        Assert.Equal(AiTextSource.Provider, result.Source);
+        Assert.Equal("Nội dung lồng nhau.", result.Text);
+    }
+
+    [Fact]
+    public async Task Suggest_ReturnsEmptyOutputFallback_WhenResponseHasNoText()
+    {
+        var service = CreateService(HttpStatusCode.OK, "{\"output\":[]}");
+
+        var result = await service.SuggestPresentationDescriptionAsync("EF Core", "Lan");
+
+        Assert.Equal(AiTextSource.Fallback, result.Source);
+        Assert.Equal("empty_output", result.ErrorCategory);
+    }
+
+    [Fact]
     public async Task Suggest_ReturnsInvalidJsonFallback_ForMalformedResponse()
     {
         var service = CreateService(HttpStatusCode.OK, "not-json");

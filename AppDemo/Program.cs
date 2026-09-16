@@ -28,15 +28,22 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LoginPath = "/Account/Login";
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
-builder.Services.Configure<OpenAiOptions>(
-    builder.Configuration.GetSection(OpenAiOptions.SectionName));
+builder.Services.AddOptions<GeminiOptions>()
+    .Bind(builder.Configuration.GetSection(GeminiOptions.SectionName))
+    .ValidateDataAnnotations()
+    .Validate(
+        options => options.Model.All(
+            character => char.IsLetterOrDigit(character) ||
+                         character is '-' or '_' or '.'),
+        "Gemini:Model chỉ được chứa chữ, số, dấu gạch ngang, gạch dưới hoặc dấu chấm.")
+    .ValidateOnStart();
 builder.Services
-    .AddHttpClient<IAiTextService, OpenAiTextService>((services, client) =>
+    .AddHttpClient<IAiTextService, GeminiTextService>((services, client) =>
     {
         var options = services
-            .GetRequiredService<Microsoft.Extensions.Options.IOptions<OpenAiOptions>>()
+            .GetRequiredService<Microsoft.Extensions.Options.IOptions<GeminiOptions>>()
             .Value;
-        client.BaseAddress = new Uri(options.BaseUrl);
+        client.BaseAddress = new Uri("https://generativelanguage.googleapis.com/");
         client.Timeout = TimeSpan.FromSeconds(options.TimeoutSeconds);
     });
 
